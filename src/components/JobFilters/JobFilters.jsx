@@ -33,7 +33,9 @@ export default function JobFilters({ jobs, onJobsProcessed }) {
     const filters = getFilters()
     const form = formRef.current
 
-    form.term.defaultValue = filters.term
+    if (!filters) return
+
+    form.term.value = filters.term
     form.jobCategory.value = filters.jobCategory
     form.sort.value = filters.sort
   }, [formRef])
