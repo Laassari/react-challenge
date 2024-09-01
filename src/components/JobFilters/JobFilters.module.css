@@ -1,0 +1,28 @@
+.filtersForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nameSearch {
+  padding-inline: 4px;
+}
+
+.sortSelect,
+.categorySelect {
+  line-height: 1.5em;
+  font-size: 16px;
+  padding-block: 0.2em;
+  padding-inline: 2px;
+}
+
+.resetBtn {
+  color: red;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.resetBtn:hover {
+  text-decoration: underline;
+}

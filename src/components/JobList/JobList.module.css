@@ -1,0 +1,16 @@
+.jobsList {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.emptyList {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  color: #383838;
+  justify-content: center;
+  margin-top: 30px;
+}

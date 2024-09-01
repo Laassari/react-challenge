@@ -1,0 +1,13 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-block: 10px;
+  gap: 10px;
+}
+
+.button {
+  border: 1px solid darkgray;
+  border-radius: 3px;
+  padding: 2px 15px;
+  font-weight: 500;
+}
