@@ -46,6 +46,9 @@ export default function JobList({ jobs, meta, loading, onPageChange }) {
                 skills={job.skills.map((s) => s.name)}
                 isRemote={isRemote(job)}
                 category={getCategory(job)}
+                sections={job.sections}
+                created_at={job.created_at}
+                languages={job.languages}
               ></JobCard>
             ))
           )}
