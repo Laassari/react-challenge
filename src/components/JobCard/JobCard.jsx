@@ -1,15 +1,22 @@
 import {
   BuildingIcon,
   Calendar,
+  GripHorizontal,
   Languages,
   LayoutGrid,
   Locate,
 } from 'lucide-react'
 import classes from './JobCard.module.css'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import clsx from 'clsx'
+import { useDrag, useDrop } from 'react-dnd'
+
+const ItemTypes = {
+  CARD: 'card',
+}
 
 export default function JobCard({
+  id,
   name,
   company,
   summary,
@@ -20,13 +27,77 @@ export default function JobCard({
   sections,
   created_at,
   languages,
+  onJobsReorder,
+  index,
 }) {
   const [collapsed, setCollapsed] = useState(true)
+  const dragRef = useRef(null)
+  const previewRef = useRef(null)
+
   const formattedCreationDate = new Date(created_at).toLocaleDateString()
   const langs = languages?.map((l) => l.name).join(', ')
 
+  const [{ handlerId }, drop] = useDrop({
+    accept: ItemTypes.CARD,
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      }
+    },
+    hover(item, monitor) {
+      if (!previewRef.current) {
+        return
+      }
+      const dragIndex = item.index
+      const hoverIndex = index
+      if (dragIndex === hoverIndex) {
+        return
+      }
+      const hoverBoundingRect = previewRef.current?.getBoundingClientRect()
+
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+
+      const clientOffset = monitor.getClientOffset()
+
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return
+      }
+
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return
+      }
+
+      onJobsReorder(dragIndex, hoverIndex)
+
+      item.index = hoverIndex
+    },
+  })
+  const [{ isDragging }, drag, preview] = useDrag({
+    type: ItemTypes.CARD,
+    item: () => {
+      return { id, index }
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  })
+
+  drag(dragRef)
+  drop(preview(previewRef))
+
   return (
-    <div className={classes.container}>
+    <div
+      className={classes.container}
+      data-handler-id={handlerId}
+      style={isDragging ? { opacity: 0, cursor: 'pointer' } : {}}
+      ref={previewRef}
+    >
+      <button className={classes.dndIcon} ref={dragRef}>
+        <GripHorizontal size={18} />
+      </button>
       <button
         className={classes.title}
         onClick={() => setCollapsed(!collapsed)}

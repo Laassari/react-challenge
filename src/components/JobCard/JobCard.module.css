@@ -4,6 +4,15 @@
   padding: 20px;
 }
 
+.dndIcon {
+  margin-block: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
 .title {
   margin-block: 0;
   padding: 0;

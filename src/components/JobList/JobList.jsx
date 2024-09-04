@@ -3,9 +3,17 @@ import classes from './JobList.module.css'
 import { CircleSlash } from 'lucide-react'
 import Pagination from '../Pagination/Pagination'
 import Loader from '../Loader/Loader'
+import { useEffect, useState } from 'react'
+import reorder from '../../utils/reorder'
 
 export default function JobList({ jobs, meta, loading, onPageChange }) {
-  const isRemote = (job) => {
+  const [jobsList, setJobsList] = useState(jobs)
+
+  useEffect(() => {
+    setJobsList(jobs)
+  }, [jobs])
+
+  function isRemote(job) {
     const relocation = job.tags.find((t) => t.name === 'Relocation')
 
     return relocation?.value === 'remote'
@@ -22,7 +30,7 @@ export default function JobList({ jobs, meta, loading, onPageChange }) {
     return category?.value
   }
 
-  if (!loading && !jobs) return
+  if (!loading && !jobsList) return
 
   return (
     <div>
@@ -30,15 +38,16 @@ export default function JobList({ jobs, meta, loading, onPageChange }) {
         <Loader />
       ) : (
         <div className={classes.jobsList}>
-          {jobs.length === 0 ? (
+          {jobsList.length === 0 ? (
             <div className={classes.emptyList}>
               <CircleSlash size={24} />
               No jobs matched.
             </div>
           ) : (
-            jobs.map((job) => (
+            jobsList.map((job, idx) => (
               <JobCard
                 key={job.id}
+                id={job.id}
                 name={job.name}
                 company={getCompanyName(job)}
                 summary={job.summary}
@@ -49,6 +58,10 @@ export default function JobList({ jobs, meta, loading, onPageChange }) {
                 sections={job.sections}
                 created_at={job.created_at}
                 languages={job.languages}
+                onJobsReorder={(startIndex, endIndex) =>
+                  setJobsList(reorder(jobsList, startIndex, endIndex))
+                }
+                index={idx}
               ></JobCard>
             ))
           )}
