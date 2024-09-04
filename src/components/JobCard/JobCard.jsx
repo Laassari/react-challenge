@@ -1,6 +1,7 @@
 import {
   BuildingIcon,
   Calendar,
+  ChevronRight,
   GripHorizontal,
   Languages,
   LayoutGrid,
@@ -104,6 +105,11 @@ export default function JobCard({
       >
         <h1>
           {name} {isRemote ? '(Remote)' : ''}
+          <span
+            className={clsx(classes.arrow, { [classes.expanded]: !collapsed })}
+          >
+            <ChevronRight />
+          </span>
         </h1>
       </button>
 
